@@ -11,6 +11,8 @@ backend/storage/data/
 frontend/dist/
 frontend/.vite/
 *.tsbuildinfo
+frontend/vite.config.d.ts
+frontend/vite.config.js
 
 # IDE
 .vscode/
