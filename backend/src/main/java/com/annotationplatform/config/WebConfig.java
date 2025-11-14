@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // Get allowed origins from environment variable, default to localhost for development
         String allowedOrigins = System.getenv().getOrDefault("CORS_ALLOWED_ORIGINS", 
-            "http://localhost:5173,https://*.netlify.app");
+            "http://localhost:5173,https://*.netlify.app,https://*.pages.dev");
         
         // CORS for API endpoints
         registry.addMapping("/api/**")

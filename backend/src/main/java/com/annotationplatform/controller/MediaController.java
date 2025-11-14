@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/media")
-@CrossOrigin(originPatterns = {"http://localhost:5173", "https://*.netlify.app"})
+@CrossOrigin(originPatterns = {"http://localhost:5173", "https://*.netlify.app", "https://*.pages.dev"})
 public class MediaController {
 
     private static final Logger log = LoggerFactory.getLogger(MediaController.class);
