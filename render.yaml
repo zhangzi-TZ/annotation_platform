@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: annotation-platform-backend
+    env: docker
+    plan: free
+    dockerfilePath: backend/Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: APP_STORAGE_ROOT
+        value: /data/annotation
+      - key: APP_MEDIA_PREVIEW_FFMPEG
+        value: /usr/bin/ffmpeg
+    disk:
+      name: annotation-data
+      mountPath: /data
+      sizeGB: 10
+
