@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/media")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(originPatterns = {"http://localhost:5173", "https://*.netlify.app"})
 public class MediaController {
 
     private static final Logger log = LoggerFactory.getLogger(MediaController.class);
@@ -53,7 +53,7 @@ public class MediaController {
                     .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
                     .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:5173")
+                    .header(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                     .header(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, OPTIONS")
                     .header(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*")
                     .body(resource);
