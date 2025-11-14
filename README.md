@@ -1,131 +1,108 @@
 # ReID Annotation Platform
 
-A full-stack application for annotating cross-camera person identities. Annotators upload two synchronized videos that already contain detected bounding boxes, review track summaries, and manually assign global person IDs across both videos. The output dataset can be exported as JSON for ReID model training/testing.
+A web-based annotation tool for person re-identification across multiple videos. Upload two videos with pre-existing bounding boxes, assign consistent identity IDs across both videos, and export a ReID-ready labeled dataset.
 
-## Tech stack
+## 🌐 Live Demo
 
-- **Frontend**: React 18 + Vite + TypeScript
-- **Backend**: Spring Boot 2.7 (Java 11)
-- **Storage**: Local filesystem (videos + JSON), persisted session metadata stored as JSON under `backend/storage/data/sessions.json`
+- **Frontend**: [https://annotation-platform.pages.dev](https://annotation-platform.pages.dev)
+- **Backend API**: [https://annotation-platform.onrender.com](https://annotation-platform.onrender.com)
 
-## Project structure
+## 🚀 Quick Start
 
-```
-annotation_platform/
-├── backend/                 # Spring Boot service (port 8080)
-├── frontend/                # React SPA (dev server port 5173)
-└── sample-data/             # Example bounding-box JSON files
-```
-
-## Prerequisites
+### Prerequisites
 
 - Java 11+
-- Maven 3.9+ (needed to build/run the backend)  
-  > This environment does not ship with Maven, so the backend build was not executed here. Run `mvn spring-boot:run` locally once Maven is installed.
+- Maven 3.9+
 - Node.js 18+ and npm 9+
 
-## Running the backend
+### Local Development
 
+**Backend:**
 ```bash
-cd /Users/tianhaozhang/Github/annotation_platform/backend
+cd backend
 mvn spring-boot:run
+# Runs on http://localhost:8080
 ```
 
-Configuration defaults:
-
-- Port: `8080`
-- Storage root: `backend/storage`
-- Uploaded videos served from `http://localhost:8080/media/...`
-
-## Running the frontend
-
+**Frontend:**
 ```bash
-cd /Users/tianhaozhang/Github/annotation_platform/frontend
-npm install        # already run once, package-lock.json checked in
-npm run dev        # starts Vite dev server on http://localhost:5173
+cd frontend
+npm install
+npm run dev
+# Runs on http://localhost:5173
 ```
 
-For production builds:
+## 📋 Workflow
 
+1. **Create Session** - Enter a session name and description
+2. **Upload Videos** - Upload two videos (Video A and Video B) with their corresponding bounding box JSON files
+3. **Review Tracks** - Each video's bounding boxes are grouped by `trackId` for easy review
+4. **Match Identities** - Select tracks from both videos and assign them to the same person identity
+5. **Export Dataset** - Download the annotated session as JSON for ReID model training
+
+## 🎬 Sample Data
+
+The repository includes sample test videos and bounding box JSON files generated using the script in `sample-data/generate_test_video.py`. You can download them directly from the repository:
+
+- `sample-data/test_video_a.mp4` - Sample video for slot A
+- `sample-data/test_video_b.mp4` - Sample video for slot B
+- `sample-data/test_boxes_a.json` - Bounding boxes for video A
+- `sample-data/test_boxes_b.json` - Bounding boxes for video B
+
+To generate your own test videos, run:
 ```bash
-npm run build
-npm run preview    # serves the dist/ bundle locally
+cd sample-data
+python generate_test_video.py
 ```
 
-Set `VITE_API_BASE_URL` to point to the backend if it is hosted on a different origin.
+## 📦 Bounding Box JSON Format
 
-## Deploying to Render (backend) + Vercel (frontend)
-
-The repo already contains everything you need for a “one click” deployment:
-
-### Backend (Render.com)
-
-1. Fork this repo and connect it to Render.
-2. Render auto-detects `render.yaml` at the repo root. It defines a single **Web Service** that:
-   - Builds the backend via `backend/Dockerfile` (multi-stage Maven + Java 11 + ffmpeg).
-   - Mounts a 10 GB persistent disk at `/data` so uploaded videos and `sessions.json` survive restarts.
-   - Sets `SPRING_PROFILES_ACTIVE=prod`, `APP_STORAGE_ROOT=/data/annotation`, and `APP_MEDIA_PREVIEW_FFMPEG=/usr/bin/ffmpeg`.
-3. Click “New +” → “Blueprint” in Render, select this repo, and deploy. The resulting URL (e.g. `https://annotation-backend.onrender.com`) exposes both the API and `/media/...` streaming endpoints.
-
-> `backend/src/main/resources/application-prod.properties` reads the environment variables above and automatically binds to Render’s `$PORT`.
-
-### Frontend (Vercel)
-
-1. Import the same GitHub repo into Vercel.
-2. In the project settings set **Root Directory** = `frontend/`. (Alternatively, keep the repo root and leave `vercel.json` at the top-level; it already points Vercel to `frontend/package.json`.)
-3. Define the environment variable `VITE_API_BASE_URL` in both Preview and Production environments. Set its value to the Render backend URL from the previous step.
-4. Deploy. Vercel will run `npm install && npm run build` inside `frontend/`, publish `frontend/dist/`, and route all SPA requests back to `index.html` (thanks to `vercel.json`).
-
-The end result is:
-
-- `https://<vercel-app>.vercel.app` – React UI
-- `https://<render-service>.onrender.com` – Spring Boot API + media streaming
-
-Uploads from the Vercel app go directly to Render, where ffmpeg generates browser-friendly previews before the UI reloads.
-
-## Bounding box JSON format
-
-Upload a JSON array (one file per video) with the following schema:
-
-```jsonc
+```json
 [
   {
-    "boxId": "a_f001_t1",      // unique ID per box (auto-generated if omitted)
-    "frameIndex": 1,             // integer frame number
+    "boxId": "a_f001_t1",
+    "frameIndex": 1,
     "x": 410,
     "y": 220,
     "width": 140,
     "height": 360,
-    "frameWidth": 1280,          // used for overlay scaling (optional but recommended)
+    "frameWidth": 1280,
     "frameHeight": 720,
-    "trackId": "entrance_track_1" // identifier used when matching identities
+    "trackId": "entrance_track_1"
   }
 ]
 ```
 
-Sample files live under `sample-data/boxes-a.json` and `sample-data/boxes-b.json`.
+## 🛠️ Tech Stack
 
-## Typical workflow
+- **Frontend**: React 18 + Vite + TypeScript
+- **Backend**: Spring Boot 2.7 (Java 11)
+- **Storage**: Local filesystem (videos + JSON)
 
-1. **Create session** – From the landing page, enter a session name/description.
-2. **Upload videos + boxes** – For slots A and B, upload the MP4 (or any video format) and the matching bounding-box JSON file.
-3. **Inspect tracks** – Each video’s bounding boxes are summarized into tracks (grouped by `trackId`).
-4. **Match identities** – Select tracks from both videos and either:
-   - Enter a new label and click “Create identity”, or
-   - Click an existing identity chip to append the selected tracks to it.
-5. **Export dataset** – Use the “Export JSON” button to download the entire session (videos metadata, boxes, identities).
-
-## API highlights
+## 📚 API Endpoints
 
 | Method | Endpoint | Description |
-| --- | --- | --- |
+|--------|----------|-------------|
 | `POST` | `/api/sessions` | Create a session |
 | `GET` | `/api/sessions` | List sessions |
 | `GET` | `/api/sessions/{id}` | Session details |
-| `POST` | `/api/sessions/{id}/videos/{slot}` | Upload video + boxes (`slot` = `a` or `b`) |
+| `POST` | `/api/sessions/{id}/videos/{slot}` | Upload video + boxes |
 | `POST` | `/api/sessions/{id}/identities` | Create identity |
-| `PUT` | `/api/sessions/{id}/identities/{identityId}` | Replace label/occurrences |
-| `DELETE` | `/api/sessions/{id}/identities/{identityId}` | Remove identity |
-| `GET` | `/api/sessions/{id}/export` | Download entire session as JSON |
+| `PUT` | `/api/sessions/{id}/identities/{identityId}` | Update identity |
+| `DELETE` | `/api/sessions/{id}/identities/{identityId}` | Delete identity |
+| `GET` | `/api/sessions/{id}/export` | Export session as JSON |
 
-All responses are JSON; file uploads are handled with multipart form-data.
+## 🚢 Deployment
+
+The application is deployed using:
+- **Backend**: [Render](https://render.com) (Spring Boot service)
+- **Frontend**: [Cloudflare Pages](https://pages.cloudflare.com) (React SPA)
+
+See deployment configuration files:
+- `render.yaml` - Render backend configuration
+- `netlify.toml` - Alternative frontend deployment (Netlify)
+- `backend/Dockerfile` - Backend container image
+
+## 📄 License
+
+This project is open source and available for educational and research purposes.
