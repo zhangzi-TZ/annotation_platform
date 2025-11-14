@@ -1,0 +1,68 @@
+[
+  {
+    "boxId": "b_f001_b_track_1",
+    "frameIndex": 1,
+    "x": 600.0,
+    "y": 265.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  },
+  {
+    "boxId": "b_f006_b_track_1",
+    "frameIndex": 6,
+    "x": 614.0,
+    "y": 263.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  },
+  {
+    "boxId": "b_f011_b_track_1",
+    "frameIndex": 11,
+    "x": 625.0,
+    "y": 260.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  },
+  {
+    "boxId": "b_f016_b_track_1",
+    "frameIndex": 16,
+    "x": 629.0,
+    "y": 255.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  },
+  {
+    "boxId": "b_f021_b_track_1",
+    "frameIndex": 21,
+    "x": 627.0,
+    "y": 250.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  },
+  {
+    "boxId": "b_f026_b_track_1",
+    "frameIndex": 26,
+    "x": 617.0,
+    "y": 244.0,
+    "width": 120.0,
+    "height": 200.0,
+    "frameWidth": 1280.0,
+    "frameHeight": 720.0,
+    "trackId": "b_track_1"
+  }
+]

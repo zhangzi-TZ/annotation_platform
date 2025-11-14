@@ -35,8 +35,9 @@ yarn-error.log*
 .env.production
 
 # Sample data (keep structure but ignore large files)
-sample-data/*.mp4
-sample-data/*.json
+# Uncomment the following lines if you want to exclude sample videos from git:
+# sample-data/*.mp4
+# sample-data/*.json
 !sample-data/README.md
 !sample-data/generate_test_video.py
 
